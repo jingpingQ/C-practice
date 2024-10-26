@@ -1,0 +1,130 @@
+using System;
+
+class Node
+{
+    public int Data;
+    public Node Next;
+
+    public Node(int data)
+    {
+        Data = data;
+        Next = null;
+    }
+}
+
+class LinkedList
+{
+    private Node head;
+
+    // 插入节点到链表末尾
+    public void InsertEnd(int data)
+    {
+        Node newNode = new Node(data);
+        if (head == null)
+        {
+            head = newNode;
+            return;
+        }
+        Node temp = head;
+        while (temp.Next != null)
+        {
+            temp = temp.Next;
+        }
+        temp.Next = newNode;
+    }
+
+    // 删除节点
+    public void DeleteNode(int key)
+    {
+        Node temp = head, prev = null;
+
+        // 如果头节点是要删除的节点
+        if (temp != null && temp.Data == key)
+        {
+            head = temp.Next; // 改变头指针
+            return;
+        }
+
+        // 搜索要删除的节点
+        while (temp != null && temp.Data != key)
+        {
+            prev = temp;
+            temp = temp.Next;
+        }
+
+        // 如果未找到节点
+        if (temp == null) return;
+
+        // 断开链表
+        prev.Next = temp.Next;
+    }
+
+    // 查找节点
+    public Node FindNode(int key)
+    {
+        Node current = head;
+        while (current != null)
+        {
+            if (current.Data == key)
+            {
+                return current;
+            }
+            current = current.Next;
+        }
+        return null;
+    }
+
+    // 打印链表
+    public void PrintList()
+    {
+        Node temp = head;
+        while (temp != null)
+        {
+            Console.Write(temp.Data + " -> ");
+            temp = temp.Next;
+        }
+        Console.WriteLine("NULL");
+    }
+
+    // 释放链表
+    public void FreeList()
+    {
+        head = null; // 在C#中，垃圾回收会处理内存释放
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        LinkedList list = new LinkedList();
+
+        // 插入节点
+        list.InsertEnd(10);
+        list.InsertEnd(20);
+        list.InsertEnd(30);
+        list.InsertEnd(40);
+
+        Console.WriteLine("Initial List: ");
+        list.PrintList(); // 输出: 10 -> 20 -> 30 -> 40 -> NULL
+
+        // 查找节点
+        Node foundNode = list.FindNode(30);
+        if (foundNode != null)
+        {
+            Console.WriteLine($"Found: {foundNode.Data}"); // 输出: Found: 30
+        }
+        else
+        {
+            Console.WriteLine("Not Found");
+        }
+
+        // 删除节点
+        list.DeleteNode(20);
+        Console.WriteLine("After Deleting 20: ");
+        list.PrintList(); // 输出: 10 -> 30 -> 40 -> NULL
+
+        // 释放链表
+        list.FreeList();
+    }
+}
